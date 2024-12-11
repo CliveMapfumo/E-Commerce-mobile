@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Modal, TextInput, Alert } from 'react-native';
 
-// ProductCard component displays individual product information
 const ProductCard = ({ product, onAddToCart }) => {
   return (
     <View style={styles.card}>
@@ -10,7 +9,6 @@ const ProductCard = ({ product, onAddToCart }) => {
         <Text style={styles.title}>{product.title}</Text>
         <Text style={styles.price}>${product.price}</Text>
         <Text style={styles.description}>{product.description}</Text>
-        {/* Button to add product to cart */}
         <TouchableOpacity style={styles.addToCart} onPress={() => onAddToCart(product)}>
           <Text style={styles.addToCartText}>Add to Cart</Text>
         </TouchableOpacity>
@@ -19,17 +17,14 @@ const ProductCard = ({ product, onAddToCart }) => {
   );
 };
 
-// AuthScreen component handles user authentication (login/signup)
 const AuthScreen = ({ onLogin }) => {
-  const [isLogin, setIsLogin] = useState(true); // State to toggle between login and signup
-  const [email, setEmail] = useState(''); // Email input state
-  const [password, setPassword] = useState(''); // Password input state
-  const [username, setUsername] = useState(''); // Username input state for signup
+  const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
 
-  // Function to handle form submission
   const handleSubmit = () => {
     if (isLogin) {
-      // Validate login credentials
       if (email.trim() === '' || password.trim() === '') {
         Alert.alert('Error', 'Both email and password are required.');
         return;
@@ -41,7 +36,6 @@ const AuthScreen = ({ onLogin }) => {
         Alert.alert('Error', 'Invalid email or password.');
       }
     } else {
-      // Validate signup details
       if (username.trim() === '' || email.trim() === '' || password.trim() === '') {
         Alert.alert('Error', 'Username, email, and password are required.');
         return;
@@ -54,7 +48,6 @@ const AuthScreen = ({ onLogin }) => {
   return (
     <View style={styles.authContainer}>
       <Text style={styles.title}>{isLogin ? 'Login' : 'Sign Up'}</Text>
-      {/* Username input appears only during signup */}
       {!isLogin && (
         <TextInput
           style={styles.input}
@@ -63,14 +56,12 @@ const AuthScreen = ({ onLogin }) => {
           onChangeText={setUsername}
         />
       )}
-      {/* Email input */}
       <TextInput
         style={styles.input}
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
       />
-      {/* Password input */}
       <TextInput
         style={styles.input}
         placeholder="Password"
@@ -78,11 +69,9 @@ const AuthScreen = ({ onLogin }) => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      {/* Submit button */}
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>{isLogin ? 'Login' : 'Sign Up'}</Text>
       </TouchableOpacity>
-      {/* Toggle between login and signup */}
       <TouchableOpacity onPress={() => setIsLogin(!isLogin)}>
         <Text style={styles.toggleText}>
           {isLogin ? 'Don’t have an account? Sign Up' : 'Already have an account? Login'}
@@ -92,14 +81,13 @@ const AuthScreen = ({ onLogin }) => {
   );
 };
 
-// Main App component managing the overall application state
 const App = () => {
-  const [cart, setCart] = useState([]); // State for storing cart items
-  const [currentCategory, setCurrentCategory] = useState('women'); // Current product category
-  const [isModalVisible, setModalVisible] = useState(false); // State for cart modal visibility
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Authentication state
-  const [searchQuery, setSearchQuery] = useState(''); // Search input state
-  const [isPaymentModalVisible, setPaymentModalVisible] = useState(false); // State for payment modal visibility
+  const [cart, setCart] = useState([]);
+  const [currentCategory, setCurrentCategory] = useState('women');
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isPaymentModalVisible, setPaymentModalVisible] = useState(false);
 
   const menProducts = [
     // Men products data...
@@ -282,29 +270,24 @@ const App = () => {
     
   ];
 
-  // Function to add a product to the cart
   const handleAddToCart = (product) => {
-    setCart([...cart, product]); // Add product to cart
-    setModalVisible(true); // Show cart modal
+    setCart([...cart, product]);
+    setModalVisible(true);
   };
 
-  // Function to remove a product from the cart
   const handleRemoveFromCart = (productId) => {
     const updatedCart = cart.filter((item) => item.id !== productId);
-    setCart(updatedCart); // Update cart state
+    setCart(updatedCart);
   };
 
-  // Calculate total price of the cart
   const calculateTotal = () => {
     return cart.reduce((total, item) => total + item.price, 0).toFixed(2);
   };
 
-  // Change the current product category
   const handleCategoryChange = (category) => {
     setCurrentCategory(category);
   };
 
-  // Get products based on the selected category
   const getCurrentProducts = () => {
     switch (currentCategory) {
       case 'men':
@@ -314,44 +297,38 @@ const App = () => {
       case 'kids':
         return kidsProducts;
       default:
-        return womenProducts; // Default to women's products
+        return womenProducts;
     }
   };
 
-  // Filter products based on the search query
   const filteredProducts = getCurrentProducts().filter(product =>
     product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     product.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Function to handle checkout process
   const handleCheckout = () => {
-    setPaymentModalVisible(true); // Show payment modal
-    setModalVisible(false); // Hide cart modal
+    setPaymentModalVisible(true);
+    setModalVisible(false);
   };
 
-  // Toggle visibility of the cart modal
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
-  // Toggle visibility of the payment modal
   const togglePaymentModal = () => {
     setPaymentModalVisible(!isPaymentModalVisible);
   };
 
-  // Function to handle successful login
   const handleLogin = () => {
-    setIsAuthenticated(true); // Update authentication state
+    setIsAuthenticated(true);
   };
 
-  // Handle selected payment method during checkout
   const handlePaymentMethodSelect = (method) => {
     Alert.alert('Congratulations', `Order being processed by selected method: ${method}`, [
       {
         text: 'OK',
         onPress: () => {
-          setCart([]); // Clear the cart after payment
+          setCart([]); // Clear the cart
         },
       },
     ]);
@@ -360,7 +337,6 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      {/* Show authentication screen if not authenticated */}
       {!isAuthenticated ? (
         <AuthScreen onLogin={handleLogin} />
       ) : (
@@ -368,7 +344,6 @@ const App = () => {
           <View style={styles.navbar}>
             <Text style={styles.navbarTitle}>UZ Marketplace</Text>
             <View style={styles.navbarLinks}>
-              {/* Category buttons */}
               <TouchableOpacity
                 style={[styles.navbarLink, currentCategory === 'men' && styles.activeLink]}
                 onPress={() => handleCategoryChange('men')}
@@ -390,7 +365,6 @@ const App = () => {
             </View>
           </View>
 
-          {/* Search input for filtering products */}
           <TextInput
             style={styles.searchInput}
             placeholder="Search products..."
@@ -408,7 +382,6 @@ const App = () => {
                   : 'Kid\'s Products'}
               </Text>
               <View style={styles.cardContainer}>
-                {/* Render product cards based on filtered products */}
                 {filteredProducts.map((product) => (
                   <ProductCard key={product.id} product={product} onAddToCart={handleAddToCart} />
                 ))}
@@ -416,7 +389,6 @@ const App = () => {
             </View>
           </ScrollView>
 
-          {/* Cart modal for viewing and managing cart items */}
           <Modal
             animationType="slide"
             transparent={true}
@@ -434,7 +406,6 @@ const App = () => {
                       <View key={item.id} style={styles.cartItemContainer}>
                         <Text style={styles.cartItemName}>{item.title}</Text>
                         <Text style={styles.cartItemPrice}>${item.price.toFixed(2)}</Text>
-                        {/* Button to remove item from cart */}
                         <TouchableOpacity
                           style={styles.removeButton}
                           onPress={() => handleRemoveFromCart(item.id)}
@@ -448,11 +419,9 @@ const App = () => {
                     </View>
                   </ScrollView>
                 )}
-                {/* Button to proceed to checkout */}
                 <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
                   <Text style={styles.checkoutButtonText}>Proceed to Checkout</Text>
                 </TouchableOpacity>
-                {/* Button to continue shopping */}
                 <TouchableOpacity style={styles.continueButton} onPress={toggleModal}>
                   <Text style={styles.continueButtonText}>Continue Shopping</Text>
                 </TouchableOpacity>
@@ -460,7 +429,6 @@ const App = () => {
             </View>
           </Modal>
 
-          {/* Payment modal for selecting payment method */}
           <Modal
             animationType="slide"
             transparent={true}
@@ -470,7 +438,6 @@ const App = () => {
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
                 <Text style={styles.modalText}>Select Payment Method:</Text>
-                {/* Payment method buttons */}
                 <TouchableOpacity style={styles.paymentButton} onPress={() => handlePaymentMethodSelect('Ecocash')}>
                   <Text style={styles.paymentButtonText}>Ecocash</Text>
                 </TouchableOpacity>
@@ -480,7 +447,6 @@ const App = () => {
                 <TouchableOpacity style={styles.paymentButton} onPress={() => handlePaymentMethodSelect('Contact')}>
                   <Text style={styles.paymentButtonText}>Contact</Text>
                 </TouchableOpacity>
-                {/* Button to cancel payment selection */}
                 <TouchableOpacity style={styles.continueButton} onPress={togglePaymentModal}>
                   <Text style={styles.continueButtonText}>Cancel</Text>
                 </TouchableOpacity>
@@ -493,7 +459,6 @@ const App = () => {
   );
 };
 
-// Styles for the components
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -734,3 +699,5 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+
+
